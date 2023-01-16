@@ -60,24 +60,40 @@ class StatsGenerator
 
   def initialize(data_set: )
     @data_set = data_set
+    @compact_data_set = @data_set.compact.sum
   end
 
   def sample_count
+    @data_set.size
   end
 
   def sum
+    @compact_data_set.sum
   end
 
   def average
+    sum/sample_count
   end
 
   def minimum
+    @compact_data_set.min
   end
 
   def maximum
+    @compact_data_set.max
   end
 
-  def percentile
+  def percentile(p = 95)
+    values = @compact_data_set.dup
+
+    return 0 if values.empty?
+    return values.first if values.size == 1
+
+    values.sort!
+    return values.last if p == 100
+    rank = p / 100.0 * (values.size - 1)
+    lower, upper = values[rank.floor,2]
+    lower + (upper - lower) * (rank - rank.floor)
   end
 
   def trimmed_percentile
@@ -86,13 +102,41 @@ class StatsGenerator
   def winsorized_mean
   end
 
-  def percentile_rank
+  def percentile_rank(p = 0)
+    values = @compact_data_set.dup
+    return 0 if values.empty?
+    return 100 if values.size == 1
+    values.sort!
+    (((values.sort.rindex { |x| x <= p } || -1.0) + 1.0)) / values.size * 100.0
   end
 
   def trimmed_count
   end
 
   def trimmed_sum
+  end
+
+  def mean
+    values = @compact_data_set.dup
+    return 0 if values.empty?
+    return values.first if values.size == 1
+    values.sum / values.size
+  end
+
+  def median
+    percentile(50)
+  end
+
+  def variance
+    values = @compact_data_set.dup
+    return 0 if values.empty?
+    values.map { |sample| (mean - sample) ** 2 }.reduce(:+) / values.size
+  end
+
+  def standard_deviation
+    values = @compact_data_set.dup
+    return 0 if values.empty?
+    Math.sqrt(variance)
   end
 
 end
