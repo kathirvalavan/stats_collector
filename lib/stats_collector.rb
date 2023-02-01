@@ -1,4 +1,3 @@
-
 class StatsCollector
 
   def initialize
@@ -23,9 +22,11 @@ class StatsCollector
   end
 
   def generate_stats
-    @data_set_config.each do |_, v|
-      v.generate_stats
+    result = {}
+    @data_set_config.each do |k, v|
+      result[k] = v.generate_stats
     end
+    result
   end
 
 end
@@ -49,7 +50,17 @@ class StatsDataSet
 
   def generate_stats
     stats = StatsGenerator.new(data_set: @data_set)
-    stats.sample_count
+    OpenStruct.new(
+      sample_count: stats.sample_count,
+      sum: stats.sum,
+      average: stats.average,
+      minimum: stats.minimum,
+      percentile_95: stats.percentile,
+      mean: stats.mean,
+      median: stats.median,
+      variance: stats.variance,
+      standard_deviation: stats.standard_deviation
+    )
   end
 end
 
@@ -58,9 +69,9 @@ end
 
 class StatsGenerator
 
-  def initialize(data_set: )
+  def initialize(data_set:)
     @data_set = data_set
-    @compact_data_set = @data_set.compact.sum
+    @compact_data_set = @data_set.compact
   end
 
   def sample_count
@@ -138,7 +149,4 @@ class StatsGenerator
     return 0 if values.empty?
     Math.sqrt(variance)
   end
-
 end
-
-
