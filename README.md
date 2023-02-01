@@ -1,6 +1,6 @@
 ## Stats Collector
 
-At macro level, **Aws Cloudwatch metrics** comes handy while debugging our infra and analysing our systems performance. Metrics such as  **SampleCount**, **Percentile** helps us to take objective decision.
+At macro level, **[Aws Cloudwatch metrics](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Statistics-definitions.html)** comes handy while debugging our infra and analysing our systems performance. Metrics such as  **SampleCount**, **Percentile** helps us to take objective decision.
 At micro level, we frequently come across situation where we need to measure performance of various  code blocks or segments in our day to day development activities..
 So created **StatsCollector** which stores data and generates stats out of it.
 
@@ -43,4 +43,4 @@ stats['likes_count'].minimum # 0
 
 
 - [Ruby Benchmark](https://github.com/ruby/benchmark)
-- [Aws Cloudwatch metrics](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Statistics-definitions.html) 
+- [Aws Cloudwatch metrics](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Statistics-definitions.html)
